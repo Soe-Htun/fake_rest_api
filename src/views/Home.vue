@@ -5,8 +5,7 @@
         border 
         style="width:80%;position:relative;left:10%;overflow:none">
 
-        <el-table-column prop="firstname" sortable label="FirstName">
-        </el-table-column>
+        <el-table-column prop="firstname" sortable label="FirstName"></el-table-column>
         <el-table-column prop="lastname" label="LastName"></el-table-column>
         <el-table-column prop="city" label="City"></el-table-column>
         <el-table-column prop="phone_no" label="Phone Number"></el-table-column>

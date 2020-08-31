@@ -31,13 +31,5 @@
   "description": "## Project setup ``` npm install ```",
   "main": ".eslintrc.js",
   "author": "Soehtun",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Soe-Htun/fake-rest-api.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Soe-Htun/fake-rest-api/issues"
-  },
-  "homepage": "https://github.com/Soe-Htun/fake-rest-api#readme"
+  "license": "ISC"
 }
