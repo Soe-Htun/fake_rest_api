@@ -2,7 +2,8 @@
   <div class="home">
       <!-- table -->
       <el-table height="750px" :data="tableData.filter(data => !search || data.firstname.toLowerCase().includes(search.toLowerCase()))" 
-        border  style="width:80%;position:relative;left:10%;overflow:none">
+        border 
+        style="width:80%;position:relative;left:10%;overflow:none">
 
         <el-table-column prop="firstname" sortable label="FirstName">
         </el-table-column>
@@ -34,36 +35,56 @@
       </el-table>
 
     <el-pagination
-      background 
+      background @current-change="handleCurrentChange"
+      :current-page="current_page"
       style="float:center" 
       layout="prev, pager, next"
-      :data="tableData"
-      :total="100" page-size="5">
+      :data="tableData" :page-sizes="[1,2,3,4]"
+      :total="tableData.length" page-size="1">
     </el-pagination>
 
       <!-- dialog -->
       <el-dialog :visible.sync="dialogVisible" :center="true">
           <el-form :model="rulesForm" :inline="true" style="text-align:center">
             <el-form-item label="First Name">
-              <el-input v-model="rulesForm.firstname" placeholder=""></el-input>
+              <el-input v-model="rulesForm.firstname" style="margin-left:20px;width:210px" placeholder=""></el-input>
             </el-form-item><br>
              <el-form-item label="Last Name">
-              <el-input v-model="rulesForm.lastname" placeholder=""></el-input>
+              <el-input v-model="rulesForm.lastname" style="margin-left:20px;width:210px" placeholder=""></el-input>
             </el-form-item><br>
              <el-form-item label="City">
-              <el-input v-model="rulesForm.city" style="margin-left:9.5%" placeholder=""></el-input>
+              <el-input v-model="rulesForm.city" style="margin-left:60px;width:210px" placeholder=""></el-input>
             </el-form-item><br>
              <el-form-item label="Phone_no">
-              <el-input v-model="rulesForm.phone_no" placeholder=""></el-input>
+              <el-input v-model="rulesForm.phone_no" style="margin-left:20px;width:210px" placeholder=""></el-input>
             </el-form-item><br>
              <el-form-item label="Email">
-              <el-input v-model="rulesForm.email" style="margin-left:6%" placeholder=""></el-input>
+              <el-input v-model="rulesForm.email" style="margin-left:50px;width:210px" placeholder=""></el-input>
             </el-form-item><br>
-             <el-form-item label="Companyame" style="margin-right:3.5%">
-              <el-input v-model="rulesForm.companyName"  placeholder=""></el-input>
+            <el-form-item label="Companyame" >
+              <el-input v-model="rulesForm.companyName" style="margin-left:0px;width:210px" placeholder=""></el-input>
+            </el-form-item><br>
+
+
+            <el-form-item label="Image" >
+              <div style="width:210px;height:180px;margin-left:42px;border:2px solid rgb(242, 242, 242);">
+                <el-upload action="http://localhost:3000/fakeapi"
+                v-model="rulesForm.userImage"
+                :on-success="addimageSuccess"
+                :show-file-list="false"
+                >
+                  <el-button  style="margin:0 auto;background-color:#67C23A;color:white" size="mini">Uploaditem</el-button>
+                </el-upload>
+                <div style="margin-left:35px;height:130px;width:140px;border:1px solid rgb(242, 242, 242)">
+                  <img style="width:100%;height:100%" v-if="userImageUrl" :src="userImageUrl" alt="">
+                  <img style="width:100%;height:100%" v-else :src="editImage"  alt="">
+                </div>     
+              </div>
+                       
+                                
             </el-form-item><br>
             <el-form-item style="margin-left:6%">
-              <el-button type="primary" style="width:85px;margin-right:25px">Save</el-button>
+              <el-button type="primary" style="width:85px;margin-right:25px" @click="save()">Save</el-button>
               <el-button type="primary" style="width:85px" @click="clear()">Clear</el-button>
             </el-form-item>
           </el-form>
@@ -95,6 +116,11 @@ export default {
       userImage:'',
       url:[],
 
+      userImageUrl:'',
+      editImage:'',
+
+      current_page:1,
+
       rulesForm:{
         firstname:'',
         lastname:'',
@@ -102,10 +128,15 @@ export default {
         phone_no:'',
         email:'',
         companyName:'',
+        userImage:''
       }
     }
   },
   methods:{
+    handleCurrentChange(val){
+      this.current_page =val;
+      console.log(val);
+    },
     getData(){
       axios.get(baseUrl).then(res =>{
         for(var i=0; i< res.data.length; i++){
@@ -132,6 +163,22 @@ export default {
       this.rulesForm.phone_no = this.editItem.phone_no;
       this.rulesForm.email = this.editItem.email;
       this.rulesForm.companyName = this.editItem.companyName;
+      this.editImage = this.editItem.userImage
+    },
+    addimageSuccess(res,file){
+      // console.log('Hi=>>');
+      
+      // this.imgData=event.target.files[0];
+      // this.userImageUrl = URL.createObjectURL(file.raw);
+      // const self = this;
+      //       var reader = new FileReader();
+      //       reader.onloadend = function() {
+      //           this.editimgdata = reader.result;
+      //           self.editimgdata = reader.result;
+      //       };
+      //       reader.readAsDataURL(file.raw);
+      //       console.log("HI");
+      this.userImageUrl = URL.createObjectURL(file.raw);
     },
     handleDelete(index,row){
       this.$confirm("Are you sure to delete this item?", "Warning",{
@@ -160,7 +207,21 @@ export default {
       })
     },
     save(){
-      
+      this.dialogVisible =false;
+      // this.tableData.push({
+      //   firstname: this.rulesForm.firstname
+      // })
+      axios.post(baseUrl,{
+        firstname:this.rulesForm.firstname,
+        lastname:this.rulesForm.lastname,
+        city: this.rulesForm.city,
+        phone_no:this.rulesForm.phone_no,
+        email:this.rulesForm.email,
+        companyName:this.rulesForm.companyName
+      }).then((res) => {
+        console.log("hi=>>",res, this.rulesForm.firstname);
+        
+      })
     },
     clear(){
       this.rulesForm.firstname=''
@@ -183,6 +244,8 @@ export default {
     height: 50%;
     position: relative;
     margin:2% 18%;
-    background-repeat: repeat-x ;
+    background-repeat: no-repeat ;
+    border-radius: 50%;
+
   }
 </style>
