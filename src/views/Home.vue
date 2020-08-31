@@ -19,7 +19,6 @@
           </div>
         </template>
         </el-table-column>
-
         <el-table-column width="180px">
           <template slot="header" slot-scope="scope">
             <el-input
@@ -41,7 +40,6 @@
       :data="tableData" :page-sizes="[1,2,3,4]"
       :total="tableData.length" page-size="1">
     </el-pagination>
-
       <!-- dialog -->
       <el-dialog :visible.sync="dialogVisible" :center="true">
           <el-form :model="rulesForm" :inline="true" style="text-align:center">
@@ -78,9 +76,7 @@
                   <img style="width:100%;height:100%" v-if="userImageUrl" :src="userImageUrl" alt="">
                   <img style="width:100%;height:100%" v-else :src="editImage"  alt="">
                 </div>     
-              </div>
-                       
-                                
+              </div>                  
             </el-form-item><br>
             <el-form-item style="margin-left:6%">
               <el-button type="primary" style="width:85px;margin-right:25px" @click="save()">Save</el-button>
@@ -88,9 +84,6 @@
             </el-form-item>
           </el-form>
       </el-dialog>
-
-      
-
   </div>
 </template>
 
@@ -165,18 +158,6 @@ export default {
       this.editImage = this.editItem.userImage
     },
     addimageSuccess(res,file){
-      // console.log('Hi=>>');
-      
-      // this.imgData=event.target.files[0];
-      // this.userImageUrl = URL.createObjectURL(file.raw);
-      // const self = this;
-      //       var reader = new FileReader();
-      //       reader.onloadend = function() {
-      //           this.editimgdata = reader.result;
-      //           self.editimgdata = reader.result;
-      //       };
-      //       reader.readAsDataURL(file.raw);
-      //       console.log("HI");
       this.userImageUrl = URL.createObjectURL(file.raw);
     },
     handleDelete(index,row){
