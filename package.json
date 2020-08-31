@@ -9,6 +9,7 @@
     "start": "json-server fakeapi.js"
   },
   "dependencies": {
+    "@vue/cli": "^4.5.4",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",

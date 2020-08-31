@@ -23,5 +23,4 @@ function generateEmployees(){
     }
     return {'fakeapi': fakeapi}
 }
-
 module.exports = generateEmployees
