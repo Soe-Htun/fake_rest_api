@@ -2,7 +2,7 @@ var faker= require('faker');
 //const { fake } = require('faker');
 function generateEmployees(){
     var fakeapi =[]
-    for(var id=0; id< 50; id++){
+    for(var id=0; id< 100; id++){
         var firstName = faker.name.firstName();
         var lastName= faker.name.lastName();
         var city = faker.address.city();
