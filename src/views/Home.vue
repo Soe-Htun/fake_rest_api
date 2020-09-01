@@ -1,7 +1,8 @@
 <template>
   <div class="home">
       <!-- table -->
-      <el-table height="750px" :data="tableData.filter(data => !search || data.firstname.toLowerCase().includes(search.toLowerCase()))" 
+      <el-table :data="tableData.slice((current_page-1)*page_size,current_page*page_size)
+      .filter(data => !search || data.firstname.toLowerCase().includes(search.toLowerCase()))" 
         border 
         style="width:80%;position:relative;left:10%;overflow:none">
 
@@ -32,14 +33,21 @@
         </el-table-column>
       </el-table>
 
-    <el-pagination
+    <!-- <el-pagination
       background @current-change="handleCurrentChange"
       :current-page="current_page"
       style="float:center" 
       layout="prev, pager, next"
       :data="tableData" :page-sizes="[1,2,3,4]"
       :total="tableData.length" page-size="1">
+    </el-pagination> -->
+
+    <el-pagination
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next"
+      :total="tableData.length * 2">
     </el-pagination>
+
       <!-- dialog -->
       <el-dialog :visible.sync="dialogVisible" :center="true">
           <el-form :model="rulesForm" :inline="true" style="text-align:center">
@@ -112,6 +120,7 @@ export default {
       editImage:'',
 
       current_page:1,
+      page_size:5,
 
       rulesForm:{
         firstname:'',
@@ -125,9 +134,15 @@ export default {
     }
   },
   methods:{
-    handleCurrentChange(val){
-      this.current_page =val;
-      console.log(val);
+    handleSizeChange(val) {
+        console.log(`${val} items per page`);
+      },
+      // handleCurrentChange(val) {
+      //   console.log(`current page: ${val}`);
+      // },
+    handleCurrentChange(current_page){
+      this.current_page =current_page;
+      console.log("test",current_page);
     },
     getData(){
       axios.get(baseUrl).then(res =>{
@@ -200,7 +215,6 @@ export default {
         companyName:this.rulesForm.companyName
       }).then((res) => {
         console.log("hi=>>",res, this.rulesForm.firstname);
-        
       })
     },
     clear(){
@@ -220,12 +234,11 @@ export default {
 
 <style scoped>
   #imageShow{
-    width: 60%;
-    height: 50%;
+    width: 80px;
+    height: 80px;
     position: relative;
     margin:2% 18%;
     background-repeat: no-repeat ;
     border-radius: 50%;
-
   }
 </style>
