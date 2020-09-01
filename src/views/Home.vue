@@ -4,7 +4,7 @@
       <el-table :data="tableData.slice((current_page-1)*page_size,current_page*page_size)
       .filter(data => !search || data.firstname.toLowerCase().includes(search.toLowerCase()))" 
         border 
-        style="width:80%;position:relative;left:10%;overflow:none">
+        style="width:80%;position:relative;left:10%;">
 
         <el-table-column prop="firstname" sortable label="FirstName"></el-table-column>
         <el-table-column prop="lastname" label="LastName"></el-table-column>
@@ -33,16 +33,8 @@
         </el-table-column>
       </el-table>
 
-    <!-- <el-pagination
-      background @current-change="handleCurrentChange"
-      :current-page="current_page"
-      style="float:center" 
-      layout="prev, pager, next"
-      :data="tableData" :page-sizes="[1,2,3,4]"
-      :total="tableData.length" page-size="1">
-    </el-pagination> -->
-
     <el-pagination
+      background
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
       :total="tableData.length * 2">
@@ -134,15 +126,8 @@ export default {
     }
   },
   methods:{
-    handleSizeChange(val) {
-        console.log(`${val} items per page`);
-      },
-      // handleCurrentChange(val) {
-      //   console.log(`current page: ${val}`);
-      // },
     handleCurrentChange(current_page){
       this.current_page =current_page;
-      console.log("test",current_page);
     },
     getData(){
       axios.get(baseUrl).then(res =>{
@@ -240,5 +225,12 @@ export default {
     margin:2% 18%;
     background-repeat: no-repeat ;
     border-radius: 50%;
+  }
+  .el-pagination{
+    width:80%;
+    left: 10%;
+    position: relative;
+    text-align: right;
+    margin-top: 10px;
   }
 </style>
